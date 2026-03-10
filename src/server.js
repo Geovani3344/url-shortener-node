@@ -14,14 +14,17 @@ mongoose.connect(process.env.MONGO_URI)
 // Middleware para o Express entender JSON que vem no body das reqs
 app.use(express.json());
 
-// Rota padrao so pra testar se o servidor ta on
-app.get ('/', (req, res ) => {
-    res.send('Servidor está funcionando')
-});
+// Middleware para o Express entender dados de formulários
+app.use(express.urlencoded({ extended: true })); 
 
+// Configura o EJS como template engine para renderizar as views
+app.set('view engine', 'ejs');
 
 // Injeta as rotas de encurtamento q criei no app
 app.use(urlRoutes);
+
+// Configura o EJS como template engine para renderizar as views
+app.set('view engine', 'ejs');
 
 // Define a porta do ambiente (Heroku/Render) ou a 3000 pra dev local
 port = process.env.PORT || 3000;
