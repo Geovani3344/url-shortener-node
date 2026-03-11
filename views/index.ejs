@@ -10,11 +10,18 @@
     <div class="container">
         <h1>Encurtador de URL</h1>
 
-        <form action="/shorten" method="POST">
-            <input type="url" name="url" placeholder="Cole seu link aqui" required>
-            <br>
-            <button type="submit">Encurtar</button>
-        </form>
+        <% if (typeof error !== 'undefined' && error) { %>
+        <p style="color: #ff4d4d; font-weight: bold; margin-bottom: 20px;">
+            <%= error %>
+        </p>
+      <% } %>
+         
+    <form action="/shorten" method="POST">
+         <input type="url" name="url" placeholder="Cole seu link aqui" required>
+         <input type="text" name="customUrl" placeholder="URL personalizada (opcional)" style="margin-top: 10px;">
+        <br>
+        <button type="submit">Encurtar</button>
+    </form>
 
         <% if (typeof linkGerado !== 'undefined' && linkGerado) { %>
             <div class="bloco-resultado">

@@ -57,6 +57,28 @@ input[type="url"] {
     outline: none;
 }
 
+input[name="customUrl"] {
+    width: calc(100% - 40px);
+    max-width: 500px;
+    padding: 15px 25px;
+    border: 2px solid rgba(144, 5, 236, 0.5); /* Um pouco mais opaco para diferenciar */
+    border-radius: 30px;
+    margin: 10px auto 30px auto; /* Menos margem no topo para ficar perto do outro */
+    display: inline-block;
+    font-size: 1rem;
+    outline: none;
+    background: rgba(255, 255, 255, 0.05); /* Leve fundo para destacar no escuro */
+    color: white;
+}
+
+/* Efeito de foco para quando o user clicar */
+input[name="customUrl"]:focus {
+    border-color: rgb(144, 5, 236);
+    box-shadow: 0 0 10px rgba(144, 5, 236, 0.3);
+}
+
+
+
 button {
     background: linear-gradient(45deg, #6a11cb 0%, #2575fc 100%);
     color: white;
@@ -94,6 +116,10 @@ button:hover {
     input[type="url"] {
         width: 100%;
         margin-top: 20px;
+        margin-bottom: 20px;
+    }
+    input[name="customUrl"] {
+        width: 100%;
         margin-bottom: 20px;
     }
 
