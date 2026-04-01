@@ -1,45 +1,71 @@
 const Url = require("../models/Url"); // Importa o model do banco
 const shortid = require("shortid"); // Importa a lib pra gerar ID aleatorio
 const validUrl = require("valid-url"); // Importa a lib pra validar URL
+const { z } = require("zod"); // Importa o Zod pra validar a URL personalizada
+
+//===================================== Esquemas de validação usando Zod
+
+
+// Esquema de validação para a URL personalizada usando Zod
+const shortenUrlSchema = z.object({
+  customUrl: z
+    .string()
+    .regex(
+      /^[a-zA-Z0-9_-]+$/,
+      "A URL personalizada só pode conter letras, números, hífens e underscores.",
+    ).optional().or(z.literal("")), // Permite que seja opcional ou uma string vazia
+});
+
+
+// Esquema de validação para o shortId na rota de redirecionamento
+const redirectUrlSchema = z.object({
+  shortId: z.string().regex(
+    /^[a-zA-Z0-9_-]+$/,
+    "O ID da URL só pode conter letras, números, hífens e underscores.",
+  ),
+});
+
+
+//==========================================Fuçoes dos controllers
 
 // FUNCAO PRA CRIAR O LINK ENCURTADO
 const shortenController = async (req, res) => {
   try {
-    //Pega o link que veio no body da req
-    let { url, customUrl } = req.body;
-
-    // Remove espaços em branco caso o usuário tenha colado algo com espaço
+    let { url, customUrl } = req.body; //  Pega a URL e a URL personalizada (se tiver) que vieram do formulario
     if (customUrl) {
-      customUrl = customUrl.replace(/\s+/g, "");
+      customUrl = customUrl.replace(/\s+/g, ""); // Remove espaços em branco
     }
-    // Valida se o que chegou for realmente um link
+    const validation = shortenUrlSchema.safeParse({ customUrl });
+    if (!validation.success) {
+      return res.render("index", {
+        linkGerado: null,
+        error: validation.error.errors[0].message, // Exibe a mensagem de erro específica do regex
+      });
+    }
     if (!validUrl.isUri(url)) {
+      // Verifica se a URL é válida usando a lib valid-url
       return res.render("index", {
         linkGerado: null,
         error: "URL inválida!",
       });
     }
-
-    let shortUrl;
-    // Se o user enviou uma url personalizada, verifica se ele já existe no banco
+    let shortUrl; // Variavel pra guardar o link curto que vai ser criado
     if (customUrl) {
+      // Se tiver uma URL personalizada, verifica se ela já existe no banco
       const customUrlExists = await Url.findOne({ shortId: customUrl });
       if (customUrlExists) {
         return res.render("index", {
-          linkGerado: null,
+          linkGerado: null, // Se a URL personalizada já existir, avisa o user
           error: " Está URL já está em uso. Por favor escolha outra.",
         });
       }
-
-      // Se a URL personalizada for válida e não existir, cria o link com ela
-      shortUrl = customUrl;
-
+      shortUrl = customUrl; // Se a URL personalizada for válida e não existir, usa ela como shortId
       const newUrl = new Url({
+        // Prepara o objeto com o model do db
         originalUrl: url,
         shortId: shortUrl,
       });
       await newUrl.save();
-
       return res.render("index", {
         linkGerado: `https://gr-u.onrender.com/${shortUrl}`,
         error: null,
@@ -63,7 +89,6 @@ const shortenController = async (req, res) => {
     });
     // Salva no banco e avisa se funcionou ou n
     await newUrl.save(); // usamos o await pq é uma funcao assincrona, entao ele espera salvar pra depois mandar a resposta
-
     res.render("index", {
       linkGerado: `https://gr-u.onrender.com/${shortUrl}`,
       error: null,
@@ -78,6 +103,7 @@ const shortenController = async (req, res) => {
   }
 };
 
+
 // FUNCAO PRA MOSTRAR O FORMULARIO
 const startController = (req, res) => {
   res.render("index", {
@@ -89,21 +115,20 @@ const startController = (req, res) => {
 
 // FUNCAO PRA REDIRECIONAR E CONTAR CLIQUE
 const redirectController = async (req, res) => {
-  //Pega o ID que veio na URL do navegador
-  const shortId = req.params.shortId;
-
-  // Acha o link, soma +1 no click e traz o dado atualizado
-  const foundUrl = await Url.findOneAndUpdate(
-    { shortId: shortId },
+  const { shortId } = req.params; // Pega o shortId que veio na URL
+  const validation = redirectUrlSchema.safeParse({ shortId }); //usei sefaParse pra validar o shortId usando o esquema do Zod que criamos, pra garantir que ele só tenha caracteres permitidos
+  if (!validation.success) {
+    return res.status(400).send("ID de URL inválida!");
+  }
+  const foundUrl = await Url.findOneAndUpdate( // Acha o link, soma +1 no click e traz o dado atualizado
+    { shortId },
     { $inc: { clicks: 1 } },
-    { new: true },
+    { new: true }
   );
-
-  // Se achou no db, redireciona. Senao, avisa o user
-  if (foundUrl) {
+  if (foundUrl) { // Se achou no db, redireciona. Senao, avisa o user
     return res.redirect(foundUrl.originalUrl);
-  } else {
-    return res.send("URL não encontrada!");
+  } else { // Se nao achou, mostra erro
+    return res.status(404).send("URL não encontrada!");
   }
 };
 
