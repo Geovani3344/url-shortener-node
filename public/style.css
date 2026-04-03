@@ -24,14 +24,50 @@ body {
     min-height: 100vh;
 }
 
-/* Estilo para as badges de tecnologia  */
+/* Remove zoom automático no iOS ao clicar em inputs */
+input[type="url"],
+input[type="text"],
+button {
+    font-size: 16px;
+}
+
+/* Estilo para o título das tecnologias */
+.tech-title {
+    text-align: center;
+    font-size: 1rem;
+    font-weight: 500;
+    color: rgba(200, 210, 190, 0.7);
+    margin-bottom: 12px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+}
+
+/* Ajuste no margin do tech-badges */
 .tech-badges {
     display: flex;
     justify-content: center;
     flex-wrap: nowrap;
-    gap: 9px;
+    gap: 6px;
     margin-bottom: 20px;
     padding-bottom: 15px;
+    padding-left: 10px;
+    padding-right: 10px;
+    border-bottom: 2px solid rgba(83, 158, 67, 0.3);
+    overflow-x: auto;
+    max-width: 90%;
+    scrollbar-width: none;
+}
+
+/* Estilo para as badges de tecnologia */
+.tech-badges {
+    display: flex;
+    justify-content: center;
+    flex-wrap: nowrap;
+    gap: 6px;
+    margin-bottom: 20px;
+    padding-bottom: 15px;
+    padding-left: 10px;
+    padding-right: 10px;
     border-bottom: 2px solid rgba(83, 158, 67, 0.3);
     overflow-x: auto;
     max-width: 90%;
@@ -42,16 +78,32 @@ body {
     display: none;
 }
 
+.tech-badges a {
+    text-decoration: none;
+    display: inline-flex;
+    -webkit-tap-highlight-color: transparent;
+}
+
 .tech-badges img {
-    transition: transform 0.2s ease;
+    transition: transform 0.1s ease;
     cursor: pointer;
     flex-shrink: 0;
     height: 28px;
     width: auto;
+    pointer-events: none;
 }
 
-.tech-badges img:hover {
-    transform: scale(1.1);
+.tech-badges a:first-child {
+    margin-left: 5px;
+}
+
+.tech-badges a:last-child {
+    margin-right: 5px;
+}
+
+/* Efeito de clique */
+.tech-badges a:active img {
+    transform: scale(0.95);
 }
 
 /* Estilo para o container principal */
@@ -104,7 +156,7 @@ input[type="url"] {
     border-radius: 5px;
     margin: 18px auto;
     display: inline-block;
-    font-size: 0.9rem;
+    font-size: 16px;
     outline: none;
     background: rgba(20, 25, 23, 0.7);
     color: #e0e8e0;
@@ -126,7 +178,7 @@ input[type="text"] {
     border-radius: 5px;
     margin: 8px auto 25px auto;
     display: inline-block;
-    font-size: 0.9rem;
+    font-size: 16px;
     outline: none;
     background: rgba(20, 25, 23, 0.7);
     color: #e0e8e0;
@@ -149,7 +201,7 @@ button[type="submit"] {
     color: white;
     border: none;
     padding: 13px 40px;
-    font-size: 0.95rem;
+    font-size: 16px;
     border-radius: 48px;
     cursor: pointer;
     font-weight: 500;
@@ -200,7 +252,7 @@ button[type="submit"]:active {
     color: white;
     border: 1px solid rgba(83, 158, 67, 0.3);
     padding: 8px 28px;
-    font-size: 0.95rem;
+    font-size: 16px;
     border-radius: 48px;
     cursor: pointer;
     font-weight: 500;
@@ -238,6 +290,8 @@ button[type="submit"]:active {
         gap: 5px;
         margin-bottom: 18px;
         padding-bottom: 12px;
+        padding-left: 8px;
+        padding-right: 8px;
         max-width: 95%;
     }
     
@@ -245,8 +299,12 @@ button[type="submit"]:active {
         height: 24px;
     }
     
-    .tech-badges img:hover {
-        transform: scale(1.1);
+    .tech-badges a:first-child {
+        margin-left: 3px;
+    }
+    
+    .tech-badges a:last-child {
+        margin-right: 3px;
     }
     
     .container {
@@ -264,12 +322,12 @@ button[type="submit"]:active {
     input[type="text"] {
         width: 100%;
         padding: 11px 18px;
-        font-size: 0.85rem;
+        font-size: 16px;
     }
     
     button[type="submit"] {
         padding: 11px 32px;
-        font-size: 0.85rem;
+        font-size: 16px;
     }
     
     .success-link {
@@ -301,6 +359,8 @@ button[type="submit"]:active {
         gap: 4px;
         margin-bottom: 15px;
         padding-bottom: 10px;
+        padding-left: 6px;
+        padding-right: 6px;
         max-width: 98%;
     }
     
@@ -308,8 +368,12 @@ button[type="submit"]:active {
         height: 22px;
     }
     
-    .tech-badges img:hover {
-        transform: scale(1.1);
+    .tech-badges a:first-child {
+        margin-left: 2px;
+    }
+    
+    .tech-badges a:last-child {
+        margin-right: 2px;
     }
     
     .container {
@@ -323,13 +387,13 @@ button[type="submit"]:active {
     input[type="url"],
     input[type="text"] {
         padding: 10px 16px;
-        font-size: 0.8rem;
+        font-size: 16px;
         margin: 12px auto;
     }
     
     button[type="submit"] {
         padding: 10px 28px;
-        font-size: 0.8rem;
+        font-size: 16px;
     }
     
     .success-link {
@@ -348,14 +412,20 @@ button[type="submit"]:active {
         gap: 3px;
         margin-bottom: 12px;
         padding-bottom: 8px;
+        padding-left: 5px;
+        padding-right: 5px;
     }
     
     .tech-badges img {
         height: 20px;
     }
     
-    .tech-badges img:hover {
-        transform: scale(1.15);
+    .tech-badges a:first-child {
+        margin-left: 1px;
+    }
+    
+    .tech-badges a:last-child {
+        margin-right: 1px;
     }
     
     .container {
@@ -371,13 +441,13 @@ button[type="submit"]:active {
     input[type="url"],
     input[type="text"] {
         padding: 8px 14px;
-        font-size: 0.75rem;
+        font-size: 16px;
         margin: 10px auto;
     }
     
     button[type="submit"] {
         padding: 8px 24px;
-        font-size: 0.75rem;
+        font-size: 16px;
     }
     
     .success-link {
@@ -392,7 +462,7 @@ button[type="submit"]:active {
     
     #btnCopiar {
         padding: 6px 20px;
-        font-size: 0.75rem;
+        font-size: 16px;
     }
     
     .copyright {
@@ -406,14 +476,20 @@ button[type="submit"]:active {
     .tech-badges {
         gap: 2px;
         padding-bottom: 6px;
+        padding-left: 4px;
+        padding-right: 4px;
     }
     
     .tech-badges img {
         height: 18px;
     }
     
-    .tech-badges img:hover {
-        transform: scale(1.2);
+    .tech-badges a:first-child {
+        margin-left: 0px;
+    }
+    
+    .tech-badges a:last-child {
+        margin-right: 0px;
     }
     
     .container {
@@ -427,12 +503,12 @@ button[type="submit"]:active {
     input[type="url"],
     input[type="text"] {
         padding: 7px 12px;
-        font-size: 0.7rem;
+        font-size: 16px;
     }
     
     button[type="submit"] {
         padding: 7px 20px;
-        font-size: 0.7rem;
+        font-size: 16px;
     }
     
     .copyright {

@@ -8,85 +8,107 @@
 </head>
 <body>
 
+    <!-- Título das tecnologias -->
+<h2 class="tech-title">Tecnologias Utilizadas:</h2>
 
- <!-- Badges das tecnologias -->
-        <div class="tech-badges">
-            <img src="https://img.shields.io/badge/Node.js-339933?style=for-the-badge&logo=nodedotjs&logoColor=white" alt="Node.js" />
-            <img src="https://img.shields.io/badge/Express.js-000000?style=for-the-badge&logo=express&logoColor=white" alt="Express.js" />
-            <img src="https://img.shields.io/badge/MongoDB-4EA94B?style=for-the-badge&logo=mongodb&logoColor=white" alt="MongoDB" />
-            <img src="https://img.shields.io/badge/EJS-8B5A2B?style=for-the-badge&logo=ejs&logoColor=white" alt="EJS" />
-            <img src="https://img.shields.io/badge/Zod-3E6B9E?style=for-the-badge&logo=zod&logoColor=white" alt="Zod" />
-        </div>
+<!-- Badges das tecnologias COM LINKS -->
+<div class="tech-badges">
+    <a href="https://nodejs.org/" target="_blank" rel="noopener noreferrer">
+        <img src="https://img.shields.io/badge/Node.js-339933?style=for-the-badge&logo=nodedotjs&logoColor=white" alt="Node.js" />
+    </a>
+    <a href="https://expressjs.com/" target="_blank" rel="noopener noreferrer">
+        <img src="https://img.shields.io/badge/Express.js-000000?style=for-the-badge&logo=express&logoColor=white" alt="Express.js" />
+    </a>
+    <a href="https://www.mongodb.com/" target="_blank" rel="noopener noreferrer">
+        <img src="https://img.shields.io/badge/MongoDB-4EA94B?style=for-the-badge&logo=mongodb&logoColor=white" alt="MongoDB" />
+    </a>
+    <a href="https://ejs.co/" target="_blank" rel="noopener noreferrer">
+        <img src="https://img.shields.io/badge/EJS-8B5A2B?style=for-the-badge&logo=ejs&logoColor=white" alt="EJS" />
+    </a>
+    <a href="https://zod.dev/" target="_blank" rel="noopener noreferrer">
+        <img src="https://img.shields.io/badge/Zod-3E6B9E?style=for-the-badge&logo=zod&logoColor=white" alt="Zod" />
+    </a>
+</div>
 
-
-
-
-
-    <div class="container">
-        <h1>Encurtador de URL</h1>
-         
-        
-   <!-- Exibe mensagem de erro, se houver -->
-        <% if (typeof error !== 'undefined' && error) { %>
-        <p style="color: #ff4d4d; font-weight: bold; margin-bottom: 20px;">
-            <%= error %>
-        </p>
-      <% } %>
-         <!-- Formulário de encurtamento -->
+<div class="container">
+    <h1>Encurtador de URL</h1>
+    
+    <!-- Exibe mensagem de erro, se houver -->
+    <% if (typeof error !== 'undefined' && error) { %>
+    <p style="color: #ff4d4d; font-weight: bold; margin-bottom: 20px;">
+        <%= error %>
+    </p>
+    <% } %>
+    
+    <!-- Formulário de encurtamento -->
     <form action="/shorten" method="POST">
-         <input type="url" name="url" placeholder="Cole seu link aqui" required>
-         <input type="text" name="customUrl" placeholder="URL personalizada (opcional)" 
-         pattern="[a-zA-Z0-9\-_]+"
-         pattern="[a-zA-Z0-9\-_]+" 
-         title="Não use espaços ou caracteres especiais. Use apenas letras, números, hífens ou underline."
-         style="margin-top: 10px;">
+        <input type="url" name="url" placeholder="Cole seu link aqui" required>
+        <input type="text" name="customUrl" placeholder="URL personalizada (opcional)" 
+               pattern="[a-zA-Z0-9\-_]+" 
+               title="Não use espaços ou caracteres especiais. Use apenas letras, números, hífens ou underline."
+               style="margin-top: 10px;">
         <br>
         <button type="submit">Encurtar</button>
     </form>
-     <!-- Exibe o link encurtado, se gerado -->
-        <% if (typeof linkGerado !== 'undefined' && linkGerado) { %>
-            <div class="bloco-resultado">
-                <a href="<%= linkGerado %>" target="_blank" class="success-link" id="url">
-                    <%= linkGerado.replace('https://', '') %>
-                </a>   <!-- Remove o "https://" para deixar o link mais limpo -->
-                <br>
-                <button type="button" onclick="aoCopiar()" id="btnCopiar" style="margin-top: 15px; padding: 10px 30px; font-size: 1rem;">
-                    Copiar Link
-                </button>
-            </div>
-        <% } %>
-    </div>
-
-<!-- COPYRIGHT - Entre o container e as badges -->
-    <div class="copyright-wrapper">
-        <div class="copyright">
-            © 2026 Geovani Rodrigues
+    
+    <!-- Exibe o link encurtado, se gerado -->
+    <% if (typeof linkGerado !== 'undefined' && linkGerado) { %>
+        <div class="bloco-resultado">
+            <a href="<%= linkGerado %>" target="_blank" class="success-link" id="url">
+                <%= linkGerado.replace('https://', '') %>
+            </a>
+            <br>
+            <button type="button" onclick="aoCopiar()" id="btnCopiar">
+                Copiar Link
+            </button>
         </div>
-    </div>
+    <% } %>
+</div>
 
+<!-- COPYRIGHT -->
+<div class="copyright">
+    © 2026 Geovani Rodrigues
+</div>
 
-    <script>  
-        function aoCopiar() { // Função para copiar o link encurtado para a área de transferência
-        // Pega o endereço do link encurtado e o botão de copiar
-            const endereco = document.getElementById('url').href;
-            const botao = document.getElementById('btnCopiar');
-        // Usa a API de Clipboard para copiar o texto
-            navigator.clipboard.writeText(endereco).then(() => {
-                const textoOriginal = botao.innerText;
-                
-            // Feedback visual para o usuário
-                botao.innerText = "Copiado!";
-                botao.style.background = "#28a745"; 
-                
-          // Restaura o texto original do botão após 2 segundos
-                setTimeout(() => {
-                    botao.innerText = textoOriginal;
-                    botao.style.background = ""; 
-                }, 2000);
-            }).catch(err => { // Em caso de erro, loga no console
-                console.error("Erro ao copiar: ", err);
-            });
-        }
-    </script>
+<script>  
+    function aoCopiar() {  // Funcao para copiar o link
+        const endereco = document.getElementById('url').href;
+        const botao = document.getElementById('btnCopiar');
+        
+        navigator.clipboard.writeText(endereco).then(() => {
+            const textoOriginal = botao.innerText;
+            
+            botao.innerText = "Copiado!";
+            botao.style.background = "#28a745"; 
+            
+            setTimeout(() => {
+                botao.innerText = textoOriginal;
+                botao.style.background = ""; 
+            }, 2000);
+        }).catch(err => {
+            console.error("Erro ao copiar: ", err);
+        });
+    }
+</script>
+
+<script>
+    // Efeito de clique nas badges para mobile
+    const badgeLinks = document.querySelectorAll('.tech-badges a');
+    
+    badgeLinks.forEach(link => {
+        link.addEventListener('touchstart', function() {
+            this.style.transform = 'scale(0.95)';
+        });
+        
+        link.addEventListener('touchend', function() {
+            this.style.transform = 'scale(1)';
+        });
+        
+        link.addEventListener('touchcancel', function() {
+            this.style.transform = 'scale(1)';
+        });
+    });
+</script>
+
 </body>
 </html>
